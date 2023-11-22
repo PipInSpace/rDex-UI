@@ -1,0 +1,72 @@
+/* Terminal */
+.terminal-view {
+    /*width: calc(100% * var(--animation-scale) - 40px);*/
+    width: calc(100% - 40px);
+    transform: scale(var(--animation-scale));
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    right: 20px;
+    top: 40px;
+
+    border: 3px solid var(--dark-cl);
+    background-color: var(--background-cl);
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    opacity: calc(100% * var(--animation-scale));
+}
+
+.terminal-text-view {
+    border: 1px solid var(--very-dark-cl);
+    flex: 1 1 auto;
+    padding: 10px;
+    width: calc(100% * var(--animation-scale) - 22px);
+
+    color: var(--main-cl);
+    font-family: Fira-Code, monospace;
+    font-size: var(--font-size-terminal);
+    text-transform: none;
+    overflow: auto;
+
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.terminal-text-view::-webkit-scrollbar {
+    display: none;
+}
+
+.terminal-text-view .inserted-content {
+    overflow-anchor: none;
+    white-space: pre;
+}
+
+.terminal-text-view .anchor {
+    overflow-anchor: auto;
+    height: 1px;
+}
+
+.terminal-view textarea {
+    background-color: var(--background-cl);
+    color: var(--main-cl);
+    border: 1px solid var(--very-dark-cl);
+    outline: none;
+
+    font-family: Fira-Code, monospace;
+    font-size: var(--font-size-terminal);
+    font-weight: 400;
+
+    box-sizing: border-box;
+    margin-top: 5px;
+    height: 25px;
+    flex-shrink: 0;
+    resize: none;
+}
+
+.terminal-text-view .inserted-content::after {
+    content: " ";
+}

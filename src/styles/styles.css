@@ -1,0 +1,253 @@
+/* Fonts */
+@font-face {
+    font-family: "Fira-Code";
+    src: url(../fonts/FiraCode-VF.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "United-Sans";
+    src: url(../fonts/united-sans-35.ttf) format("truetype");
+}
+
+/* Chrome modulo support */
+@property --floor {
+    syntax: '<integer>';
+    initial-value: 0;
+    inherits: false;
+}
+
+:root {
+    --background-cl: #020303;
+    --main-cl: #9caca1;
+    --dark-cl: #778c7e;
+    --very-dark-cl: #2b3932;
+    --gray-cl: #222423;
+
+    --font-size-small: 11px;
+    --font-size-terminal: 12px;
+
+    --view-padding: 160px;
+
+    /* Universal startup animation scale 0-1 */
+    --logo-animation-scale: 2.0;
+    --animation-scale: 1.0;
+}
+
+.light {
+    --background-cl: #fcfdfd;
+    --main-cl: #3f4d43;
+    --dark-cl: #586c5f;
+    --very-dark-cl: #b3c4bb;
+    --gray-cl: #d5d8d6;
+}
+
+.alert {
+    --background-cl: #030202;
+    --main-cl: #a75b5b;
+    --dark-cl: #8c7777;
+    --very-dark-cl: #392b2b;
+    --gray-cl: #242222;
+}
+
+.light.alert {
+    --background-cl: #fdfcfc;
+    --main-cl: #992d2d;
+    --dark-cl: #773b3b;
+    --very-dark-cl: #bba1a1;
+    --gray-cl: #d8d5d5;
+}
+
+@media (min-width: 1920px) {
+    :root {
+        --font-size-terminal: 14px;
+    }
+}
+
+body {
+    background-color: var(--background-cl);
+    background-image: url(../img/background-tile.png);
+    background-repeat: repeat;
+    background-position: 1px 1px;
+
+    color: var(--main-cl);
+    font-family: United-Sans, monospace;
+    font-weight: 400;
+    font-size: var(--font-size-small);
+
+    margin: 0;
+    height: 100vh;
+
+    position: relative;
+}
+
+p,h1,h2 {
+    margin: 0;
+}
+
+/* Selection */
+.disable-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+::-moz-selection {
+    /* Code for Firefox */
+    color: var(--background-cl);
+    background: var(--main-cl);
+}
+
+::selection {
+    color: var(--background-cl);
+    background: var(--main-cl);
+}
+
+@media (min-width: 2000px) {
+    :root {
+        --font-size-small: 13px;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+/* Custom animated header rows */
+.hr {
+    display: block;
+    box-sizing: border-box;
+    height: 5px;
+    width: 100%;
+    padding-top: 2px;
+    border-left: 1px solid var(--very-dark-cl);
+    border-right: 1px solid var(--very-dark-cl);
+}
+
+.hr span {
+    background-color: var(--very-dark-cl);
+    display: block;
+    height: 1px;
+    width: calc(100% * var(--animation-scale));
+    margin: auto;
+}
+
+.column-hr {
+    margin-bottom: 24px;
+    margin-top: -2px;
+}
+
+.hr-title {
+    margin-left: 2px;
+}
+
+
+/* Main containers */
+.main-view {
+    position: absolute;
+    top:    var(--view-padding);
+    left:   var(--view-padding);
+    right:  var(--view-padding);
+    bottom: var(--view-padding);
+    display: flex;
+
+    /* Remove Whitespace */
+    font-size: 0;
+}
+
+.view-column {
+    width: 70%;
+    width: calc(70% - (70% - 20px * floor(70% / 20px)));
+    width: calc(70% - mod(70%, 20px) + 20px);
+    height: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    color: var(--very-dark-cl);
+    position: relative;
+    display: flex;
+    min-height: min-content;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.view-column-small {
+    width: 15%;
+    width: calc(15% - mod(15%, 20px));
+    padding: 0;
+}
+
+.view-column-small+.hr:last-of-type{
+    position: absolute;
+    bottom: 0;
+}
+
+.view-widgets {
+    flex: 1 1 auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-bottom: 10px;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+
+/* Intro Logo */
+.logo {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    background-color: var(--background-cl);
+    background-image: url(../img/logoDark.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: calc(20% * sin(var(--logo-animation-scale)));
+    opacity: calc(100% - 100%*var(--animation-scale));
+}
+
+.light .logo {
+    background-image: url(../img/logoLight.png);
+}
+
+.logo img {
+    margin: auto;
+    height: 320px;
+    transform: scale(calc(sin(var(--logo-animation-scale))));
+    filter: blur(calc(20px * (1.0 - var(--logo-animation-scale))));
+    
+}
+
+/* Sub view. Displays small info bands */
+.sub-view-container {
+    position: absolute;
+    top: calc(100vh - var(--view-padding));
+    left: var(--view-padding);
+    right: var(--view-padding);
+    height: 20px;
+
+    display: flex;
+    flex-direction: row;
+
+    color: var(--very-dark-cl);
+    text-transform: uppercase;
+}
+
+.sub-view-container div {
+    display: flex;
+    flex-direction: column;
+}
+
+.sub-view-container p {
+    margin: 2px 5px 0 5px;
+}

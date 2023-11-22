@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Interface</title>
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/terminal.css">
+    <link rel="stylesheet" type="text/css" href="styles/widgets.css">
+</head>
+<body class="alert2">
+    <script type="module" src="scripts/terminal.js"></script>
+    <script type="module" src="scripts/main.js"></script>
+    <div class="main-view">
+
+
+        <div class="view-column view-column-small disable-select">
+            <span class="hr-title">System</span>
+            <br><span class="hr column-hr"><span></span></span>
+
+            <div class="view-widgets">
+                <span class="hr"><span></span></span>
+                <div class="clock">
+                    <span id="hours">00</span>
+                    <span class="seperator">:</span>
+                    <span id="minutes">00</span>
+                    <span class="seperator">:</span>
+                    <span id="seconds">00</span>
+                </div>
+                <div class="data-sec hr-sections">
+                    <div style="width: 20.5%;">
+                        <span class="hr"><span></span></span>
+                        <p id="data-sec-year">2023</p>
+                        <p id="data-sec-date">Dec 1</p>
+                        <span class="hr"><span></span></span>
+                    </div>
+                    <div style="width: 6%;">
+                        <span class="hr"><span></span></span>
+                        <span class="hr"><span></span></span>
+                    </div>
+                    <div style="width: 20.5%;">
+                        <span class="hr"><span></span></span>
+                        <p>System</p>
+                        <p>Online</p>
+                        <span class="hr"><span></span></span>
+                    </div>
+                    <div style="width: 6%;">
+                        <span class="hr"><span></span></span>
+                        <span class="hr"><span></span></span>
+                    </div>
+                    <div style="width: 25.5%;">
+                        <span class="hr"><span></span></span>
+                        <p>Uptime</p>
+                        <p>10:03:58</p>
+                        <span class="hr"><span></span></span>
+                    </div>
+                    <div style="width: 6%;">
+                        <span class="hr"><span></span></span>
+                        <span class="hr"><span></span></span>
+                    </div>
+                    <div style="width: 15.5%;">
+                        <span class="hr"><span></span></span>
+                        <p>V</p>
+                        <p style="text-transform: none;">b0.1</p>
+                        <span class="hr"><span></span></span>
+                    </div>
+                </div>
+                <div class="image">
+                    <span class="hr"><span></span></span>
+                    <!--<canvas class="image-element" id="noise-graph-canvas" width="200" height="130"></canvas>
+                    <script src="scripts/noise-graph.js"></script>-->
+                    <span class="hr"><span></span></span>
+                </div>
+                
+                
+            </div>
+
+            <span class="hr"><span></span></span>
+        </div>
+
+
+        <div class="view-column">
+            <span class="hr-title disable-select">Terminal</span>
+            <br><span class="hr column-hr"><span></span></span>
+            <div class="terminal-view">
+                <div class="terminal-text-view" id="terminal-text">
+                    <div class="anchor" id="term-anchor"></div>
+                </div>
+                <textarea id="terminal-textarea"></textarea>
+            </div>
+        </div>
+
+
+        <div class="view-column view-column-small disable-select">
+            <span class="hr-title">Network</span>
+            <br><span class="hr column-hr"><span></span></span>
+
+            <div class="view-widgets">
+                <span class="hr"><span></span></span>
+                <div class="data-sec">
+                    <div style="width: 15%;">
+                        <img src="img/128252966_1058233174672815_727270693961426170_n.jpg">
+                    </div>
+                    <div style="width: 20.5%;">
+                        <p>User</p>
+                        <p>PipInSpace</p>
+                    </div>
+                </div>
+                <span class="hr"><span></span></span>
+                <div class="error-log">
+                    <span class="hr"><span></span></span>
+                    <p>Error Log</p>
+                    <div class="log" id="error-log">
+                    </div>
+                    <span class="hr"><span></span></span>
+                </div>
+            </div>
+            
+            <span class="hr"><span></span></span>
+        </div>
+
+
+    </div>
+
+    <div class="sub-view-container">
+        <div id="left-sub-view" style="width: 15%; width: calc(15% - mod(15%, 20px)); align-items: end;">
+            <div style="width: 100%; margin-top: 20px; align-items: end;"><span class="hr sub-view-line" style="width: 30%;"><span></span></span></div>
+            <p>rdex ui</p>
+        </div>
+        <div id="middle-sub-view" style="width: 70%; width: calc(70% - mod(70%, 20px) + 20px);">
+        </div>
+        <div id="right-sub-view" style="width: 15%; width: calc(15% - mod(15%, 20px));">
+            <div style="width: 100%; margin-top: 20px;"><span class="hr sub-view-line" style="width: 30%;"><span></span></span></div>
+            <p>Alpha Test</p>
+        </div>
+    </div>
+
+    <div class="logo" id="logo">
+    </div>
+</body>
+</html>
