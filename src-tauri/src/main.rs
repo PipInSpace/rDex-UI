@@ -63,28 +63,27 @@ fn terminal(rx: Receiver<String>, window: tauri::Window) {
         if byte[0] != 0 {
             match ch {
                 '\n' => {
-                    println!("{}\\n", std::str::from_utf8(&line).unwrap());
+                    // New line. Send current line and exit replace mode
+                    if let Ok(li) = std::str::from_utf8(&line) {
+                        println!("{}\\n", li);
+                    }
 
                     lines.push(line.clone());
-
-                    if line.len() != 0 {send(&line, replace_line, &window);}
-                    //send(&line, replace_line, &window);
-                    //if replace_line && line.as_bytes()[line.len() - 1] as char != '\r' {
-                    //    window.emit("terminal_out_replace", &line).unwrap();
-                    //} else {
-                    //    window.emit("terminal_out", &line).unwrap();
-                    //}
+                    if !(line.len() == 0 && replace_line) {send(&line, replace_line, &window);}
                     replace_line = false;
 
                     line = vec![];
                 }
                 '\r' => {
-                    print!("{} \\r", std::str::from_utf8(&line).unwrap());
+                    // Carret return. Send current line and enter replace mode
+                    if let Ok(li) = std::str::from_utf8(&line) {
+                        print!("{}\\r", li);
+                    }
 
                     lines.push(line.clone());
                     send(&line, replace_line, &window);
-
                     replace_line = true;
+
                     line = vec![];
                 }
                 '\x1b' => {
@@ -101,14 +100,13 @@ fn terminal(rx: Receiver<String>, window: tauri::Window) {
 
 fn send(line: &[u8], replace: bool, window: &tauri::Window) {
     
-    let line = std::str::from_utf8(line).unwrap();
+    if let Ok(li) = std::str::from_utf8(line) {
 
-    //println!("send {}", line);
-
-    if replace {
-        window.emit("terminal_out_replace", line).unwrap();
-    } else {
-        window.emit("terminal_out", line).unwrap();
+        if replace {
+            window.emit("terminal_out_replace", li).unwrap();
+        } else {
+            window.emit("terminal_out", li).unwrap();
+        }
     }
 }
 

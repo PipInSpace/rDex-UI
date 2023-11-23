@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
     init();
 });
 
-if (new Date().getHours() >= 6 && new Date().getHours() <= 17) {
-    console.log("Light")
-    document.querySelector("body").setAttribute("class", "light");
-}
+//if (new Date().getHours() >= 6 && new Date().getHours() <= 17) {
+//    console.log("Light")
+//    document.querySelector("body").setAttribute("class", "light");
+//}

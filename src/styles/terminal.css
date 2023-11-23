@@ -20,8 +20,10 @@
 
 .terminal-text-view {
     border: 1px solid var(--very-dark-cl);
+    border-bottom: 0;
     flex: 1 1 auto;
-    padding: 10px;
+    padding: 10px 10px 0 10px;
+    
     width: calc(100% * var(--animation-scale) - 22px);
 
     color: var(--main-cl);
@@ -50,10 +52,11 @@
     height: 1px;
 }
 
-.terminal-view textarea {
+.terminal-view #terminal-textarea {
     background-color: var(--background-cl);
     color: var(--main-cl);
     border: 1px solid var(--very-dark-cl);
+    border-top: 0;
     outline: none;
 
     font-family: Fira-Code, monospace;
@@ -61,10 +64,50 @@
     font-weight: 400;
 
     box-sizing: border-box;
-    margin-top: 5px;
     height: 25px;
+    padding: 0 10px 10px 10px;
     flex-shrink: 0;
     resize: none;
+
+    display: flex;
+
+    text-transform: none;
+    text-align: start;
+    text-decoration: none;
+
+    caret-color: transparent;
+}
+
+@media (min-width: 1920px) {
+    .terminal-view #terminal-textarea {
+        height: 27px;
+    }
+}
+
+@keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+
+@-webkit-keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+
+.terminal-view #terminal-textarea:after {
+    content: "";
+    display: inline-block;
+    width: calc(var(--font-size-terminal)/2);
+    height: calc(var(--font-size-terminal) + 2px);
+    margin-left: 2px;
+}
+
+.terminal-view #terminal-textarea.active:after {
+    background-color: var(--main-cl);
+    animation: blink-animation 1.05s steps(2, start) infinite;
+    -webkit-animation: blink-animation 1.05s steps(2, start) infinite;
 }
 
 .terminal-text-view .inserted-content::after {
