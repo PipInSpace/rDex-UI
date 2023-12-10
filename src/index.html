@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="styles/terminal.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets.css">
 </head>
-<body class="alert2">
+<body class="">
     <script type="module" src="scripts/terminal.js"></script>
     <script type="module" src="scripts/main.js"></script>
     <div class="main-view">
@@ -19,7 +19,7 @@
             <br><span class="hr column-hr"><span></span></span>
 
             <div class="view-widgets">
-                <span class="hr"><span></span></span>
+                <span class="hr"><span style="animation-delay: 2700ms;"></span></span>
                 <div class="clock">
                     <span id="hours">00</span>
                     <span class="seperator">:</span>
@@ -86,7 +86,7 @@
                 <div class="terminal-text-view" id="terminal-text">
                     <div class="anchor" id="term-anchor"></div>
                 </div>
-                <div id="terminal-textarea" contenteditable="true" spellcheck="false"></div>
+                <div type="text" id="terminal-textarea" contenteditable="true" spellcheck="false"></div>
             </div>
         </div>
 
@@ -96,7 +96,7 @@
             <br><span class="hr column-hr"><span></span></span>
 
             <div class="view-widgets">
-                <span class="hr"><span></span></span>
+                <span class="hr"><span style="animation-delay: 2700ms;"></span></span>
                 <div class="data-sec">
                     <div style="width: 15%;">
                         <img src="img/128252966_1058233174672815_727270693961426170_n.jpg">
@@ -106,13 +106,13 @@
                         <p>PipInSpace</p>
                     </div>
                 </div>
-                <span class="hr"><span></span></span>
+                <span class="hr"><span style="animation-delay: 2700ms;"></span></span>
                 <div class="error-log">
-                    <span class="hr"><span></span></span>
-                    <p>Error Log</p>
+                    <span class="hr"><span style="animation-delay: 2900ms;"></span></span>
+                    <p style="opacity: 0%; animation: opacity 500ms 3100ms forwards;">Error Log</p>
                     <div class="log" id="error-log">
                     </div>
-                    <span class="hr"><span></span></span>
+                    <span class="hr"><span style="animation-delay: 2900ms;"></span></span>
                 </div>
             </div>
             
@@ -122,7 +122,7 @@
 
     </div>
 
-    <div class="sub-view-container">
+    <div class="sub-view-container disable-select">
         <div id="left-sub-view" style="width: 15%; width: calc(15% - mod(15%, 20px)); align-items: end;">
             <div style="width: 100%; margin-top: 20px; align-items: end;"><span class="hr sub-view-line" style="width: 30%;"><span></span></span></div>
             <p>rdex ui</p>

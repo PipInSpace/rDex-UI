@@ -15,7 +15,11 @@
     display: flex;
     flex-direction: column;
     padding: 5px;
-    opacity: calc(100% * var(--animation-scale));
+}
+
+.terminal-view {
+    opacity: 0%;
+    animation: opacity 700ms 2500ms forwards;
 }
 
 .terminal-text-view {
@@ -42,9 +46,15 @@
     display: none;
 }
 
+@keyframes content-slide-in {
+    0% {transform: translateX(2px);}
+    100% {transform: translateX(0);}
+}
+
 .terminal-text-view .inserted-content {
     overflow-anchor: none;
     white-space: pre;
+    animation: content-slide-in 50ms forwards;
 }
 
 .terminal-text-view .anchor {
@@ -76,6 +86,8 @@
     text-decoration: none;
 
     caret-color: transparent;
+
+    --caret-pos: 0;
 }
 
 @media (min-width: 1920px) {
@@ -101,7 +113,7 @@
     display: inline-block;
     width: calc(var(--font-size-terminal)/2);
     height: calc(var(--font-size-terminal) + 2px);
-    margin-left: 2px;
+    margin-left: calc(var(--caret-pos) * -8.63px);
 }
 
 .terminal-view #terminal-textarea.active:after {

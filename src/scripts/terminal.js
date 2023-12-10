@@ -1,3 +1,6 @@
+var terminalActive = false;
+// Is terminal capturing user input
+
 function terminalAppend(string) {
     try {
         let terminal = document.getElementById("terminal-text")
@@ -29,16 +32,58 @@ function consoleLog(string) {
 
 function testTerminalChange(e) {
     var key = e.keyCode;
+    var te_ar = document.getElementById("terminal-textarea");
     console.log("Pressed " + key)
 
     // If the user has pressed enter
     if (key === 13) {
-        let command = document.getElementById("terminal-textarea").innerHTML;
+        let command = te_ar.innerHTML;
         window.__TAURI__.invoke('send_terminal', { input: command })
         setTimeout(() => {
-            document.getElementById("terminal-textarea").innerHTML = "";
-        }, 10);
+            te_ar.innerHTML = "";
+        }, 2);
     }
+
+    // User has pressed control C
+    if (e.ctrlKey && key == 67) {
+        console.log("Control C")
+        window.__TAURI__.invoke('send_terminal', { input: "\x03" })
+    }
+
+    setTimeout(() => {
+        let carpos = getCaretPosition(te_ar);
+        let textlen = te_ar.innerHTML.length;
+        console.log(carpos);
+        console.log(textlen);
+        console.log(textlen - carpos);
+        te_ar.style.setProperty("--caret-pos", textlen-carpos);
+    }, 4);
+    
+}
+
+function getCaretPosition(editableDiv) {
+    var caretPos = 0,
+        sel, range;
+    if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            if (range.commonAncestorContainer.parentNode == editableDiv) {
+                caretPos = range.endOffset;
+            }
+        }
+    } else if (document.selection && document.selection.createRange) {
+        range = document.selection.createRange();
+        if (range.parentElement() == editableDiv) {
+            var tempEl = document.createElement("span");
+            editableDiv.insertBefore(tempEl, editableDiv.firstChild);
+            var tempRange = range.duplicate();
+            tempRange.moveToElementText(tempEl);
+            tempRange.setEndPoint("EndToEnd", range);
+            caretPos = tempRange.text.length;
+        }
+    }
+    return caretPos;
 }
 
 window.__TAURI__.event.listen('terminal_out', (event) => {
@@ -49,7 +94,7 @@ window.__TAURI__.event.listen('terminal_out_replace', (event) => {
     terminalReplace(event.payload);
 })
 
-document.getElementById("terminal-textarea").addEventListener('keypress', (e) => {testTerminalChange(e)});
+document.getElementById("terminal-textarea").addEventListener('keydown', (e) => {testTerminalChange(e)});
 
 // Click detection to enable selection
 let startX;
@@ -69,12 +114,20 @@ document.getElementById("terminal-view").addEventListener('mouseup', (e) => {
         // Click!
         document.getElementById("terminal-textarea").focus();
         document.getElementById("terminal-textarea").classList.add("active");
+        terminalActive = true;
+        let carpos = getCaretPosition(document.getElementById("terminal-textarea"));
+        let textlen = document.getElementById("terminal-textarea").innerHTML.length;
+        console.log(carpos);
+        console.log(textlen);
+        console.log(textlen - carpos);
+        document.getElementById("terminal-textarea").style.setProperty("--caret-pos", textlen - carpos);
     }
     
 });
 
 document.getElementById("terminal-textarea").addEventListener('focusout', (e) => {
     document.getElementById("terminal-textarea").classList.remove("active");
+    terminalActive = false;
 })
 
 export {consoleLog, terminalAppend, testTerminalChange}

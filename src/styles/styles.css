@@ -115,6 +115,15 @@ p,h1,h2 {
 }
 
 /* Custom animated header rows */
+@keyframes seperator-boot {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}
+
 .hr {
     display: block;
     box-sizing: border-box;
@@ -129,7 +138,12 @@ p,h1,h2 {
     background-color: var(--very-dark-cl);
     display: block;
     height: 1px;
-    width: calc(100% * var(--animation-scale));
+    /*width: calc(100% * var(--animation-scale));*/
+    width: 0%;
+    animation-name: seperator-boot;
+    animation-duration: 350ms;
+    animation-delay: 2500ms;
+    animation-fill-mode: forwards;
     margin: auto;
 }
 

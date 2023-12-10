@@ -1,6 +1,6 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 
-use std::io::{BufRead, BufReader, Write, Read};
+use std::io::{Write, Read};
 use std::process::{Command, Stdio};
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::thread;
@@ -12,13 +12,14 @@ pub struct TerminalConnection(Sender<String>);
 #[tauri::command]
 fn send_terminal(input: String, term_input: State<'_, TerminalConnection>) {
     let term_input = term_input.0.clone();
-    println!("{} send to terminal", input);
+    //println!("{} send to terminal", input);
     term_input.send(input).unwrap();
 }
 
 fn terminal(rx: Receiver<String>, window: tauri::Window) {
     
     let mut cmd = Command::new("cmd")
+    .arg("-i")
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
@@ -27,13 +28,11 @@ fn terminal(rx: Receiver<String>, window: tauri::Window) {
 
     let mut stdin = cmd.stdin.take().unwrap();
     let mut stdout = cmd.stdout.take().unwrap();
-    let stderr = cmd.stderr.take().unwrap();
+    //let stderr = cmd.stderr.take().unwrap();
     //let stdout_reader = BufReader::new(stdout);
-    let stderr_reader = BufReader::new(stderr);
+    //let stderr_reader = BufReader::new(stderr);
     //let mut stdout_lines = stdout_reader.lines();
-    let _stderr_lines = stderr_reader.lines();
-
-    
+    //let _stderr_lines = stderr_reader.lines();
 
     // Input thread
     thread::spawn(move || {
@@ -88,9 +87,10 @@ fn terminal(rx: Receiver<String>, window: tauri::Window) {
                 }
                 '\x1b' => {
                     // Escape char
+                    print!("ESC ")
                 }
                 _ => {
-                    // print!("{} ", ch as u8);
+                    print!("{} ", ch as u8);
                     line.push(ch as u8);
                 }
             }

@@ -10,7 +10,8 @@
     line-height: 100%;
     font-family: Fira-Code, monospace;
     color: var(--main-cl);
-    opacity: calc(100% * var(--animation-scale));
+    opacity: 0%;
+    animation: opacity 500ms 2900ms forwards;
 }
 
 .clock span {
@@ -50,6 +51,8 @@
 .data-sec div p {
     margin: 2px 0 2px 5px;
     font-size: var(--font-size-small);
+    opacity: 0%;
+    animation: opacity 500ms 3000ms forwards;
 }
 .data-sec div p:last-of-type {
     color: var(--dark-cl);
@@ -89,6 +92,14 @@
     margin-bottom: 5px;
 }
 
+/* Error log */
+@keyframes opacity {
+    0% {opacity: 0%}
+    45% {opacity: 45%}
+    47% {opacity: 0%}
+    50% {opacity: 50%}
+    100% {opacity: 100%}
+}
 .view-widgets .error-log {
     width: 100%;
     height: 20%;
@@ -109,6 +120,8 @@
     /* Firefox */
 
     color: var(--very-dark-cl);
+    opacity: 0%;
+    animation: opacity 500ms 3100ms forwards;
 }
 
 .view-widgets .error-log::-webkit-scrollbar {
