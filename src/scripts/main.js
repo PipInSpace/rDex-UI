@@ -1,4 +1,4 @@
-import { consoleLog, terminalAppend } from "./terminal.js";
+import { consoleLog, terminalAppend, term } from "./terminal.js";
 import { hoursf, minutesf, secondsf } from "./time.js";
 
 var r = document.querySelector(':root');
@@ -98,7 +98,7 @@ Client task not privileged to open IOHIDSystem for mapping memory(e00002c1)\n\
 Client task not privileged to open IOHIDSystem for mapping memory(e00003d2)".split("\n");
 
 function init() {
-    consoleLog("Rebooting");
+    //consoleLog("Rebooting");
 
     window.addEventListener('resize', resize);
     resize();
@@ -146,7 +146,8 @@ function init() {
         setTimeout(() => {
             var ttext = document.getElementById("terminal-text");
             ttext.scrollTop = ttext.scrollHeight;
-            terminalAppend(bootMsg[i]);
+            //terminalAppend(bootMsg[i]);
+            term.write(bootMsg[i] + "\n\r");
         }, timeout + 2500);
     }
     timeout = 0;

@@ -24,9 +24,8 @@
 
 .terminal-text-view {
     border: 1px solid var(--very-dark-cl);
-    border-bottom: 0;
     flex: 1 1 auto;
-    padding: 10px 10px 0 10px;
+    padding: 10px;
     
     width: calc(100% * var(--animation-scale) - 22px);
 
@@ -75,7 +74,7 @@
 
     box-sizing: border-box;
     height: 25px;
-    padding: 0 10px 10px 10px;
+    padding: 10px;
     flex-shrink: 0;
     resize: none;
 

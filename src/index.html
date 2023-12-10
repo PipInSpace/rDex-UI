@@ -7,6 +7,11 @@
     <link rel="stylesheet" type="text/css" href="styles/styles.css">
     <link rel="stylesheet" type="text/css" href="styles/terminal.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets.css">
+    <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+    <script src="node_modules/xterm/lib/xterm.js"></script>
+    <script src="node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <script src="node_modules/xterm-addon-webgl/lib/xterm-addon-webgl.js"></script>
+    <script src="node_modules/xterm-addon-ligatures/lib/xterm-addon-ligatures.js"></script>
 </head>
 <body class="">
     <script type="module" src="scripts/terminal.js"></script>
@@ -84,9 +89,9 @@
             <br><span class="hr column-hr"><span></span></span>
             <div class="terminal-view" id="terminal-view">
                 <div class="terminal-text-view" id="terminal-text">
-                    <div class="anchor" id="term-anchor"></div>
+                    <!--<div class="anchor" id="term-anchor"></div>-->
                 </div>
-                <div type="text" id="terminal-textarea" contenteditable="true" spellcheck="false"></div>
+                <!--<div type="text" id="terminal-textarea" contenteditable="true" spellcheck="false"></div>-->
             </div>
         </div>
 

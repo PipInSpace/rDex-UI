@@ -1,28 +1,18 @@
-var terminalActive = false;
-// Is terminal capturing user input
+var termFontSize = 15;
 
 function terminalAppend(string) {
-    try {
-        let terminal = document.getElementById("terminal-text")
-        let term_anchor = document.getElementById("term-anchor")
-
-        let msg = document.createElement("div");
-        msg.className = "inserted-content";
-        msg.innerText = string;
-
-        terminal.insertBefore(msg, term_anchor);
-    } catch (e) { }
+    term.write(string + "\n\r")
 }
 
 function terminalReplace(string) {
-    let terminal = document.getElementById("terminal-text")
-    let msg = document.createElement("div");
+    //let terminal = document.getElementById("terminal-text")
+    //let msg = document.createElement("div");
 
-    msg.className = "inserted-content";
-    msg.innerText = string;
+    //msg.className = "inserted-content";
+    //msg.innerText = string;
 
-    terminal.replaceChild(msg, terminal.childNodes[terminal.childNodes.length - 3])
-    console.log("Has replaced")
+    //terminal.replaceChild(msg, terminal.childNodes[terminal.childNodes.length - 3])
+    //console.log("Has replaced")
 }
 
 function consoleLog(string) {
@@ -61,31 +51,6 @@ function testTerminalChange(e) {
     
 }
 
-function getCaretPosition(editableDiv) {
-    var caretPos = 0,
-        sel, range;
-    if (window.getSelection) {
-        sel = window.getSelection();
-        if (sel.rangeCount) {
-            range = sel.getRangeAt(0);
-            if (range.commonAncestorContainer.parentNode == editableDiv) {
-                caretPos = range.endOffset;
-            }
-        }
-    } else if (document.selection && document.selection.createRange) {
-        range = document.selection.createRange();
-        if (range.parentElement() == editableDiv) {
-            var tempEl = document.createElement("span");
-            editableDiv.insertBefore(tempEl, editableDiv.firstChild);
-            var tempRange = range.duplicate();
-            tempRange.moveToElementText(tempEl);
-            tempRange.setEndPoint("EndToEnd", range);
-            caretPos = tempRange.text.length;
-        }
-    }
-    return caretPos;
-}
-
 window.__TAURI__.event.listen('terminal_out', (event) => {
     terminalAppend(event.payload);
 })
@@ -94,40 +59,121 @@ window.__TAURI__.event.listen('terminal_out_replace', (event) => {
     terminalReplace(event.payload);
 })
 
-document.getElementById("terminal-textarea").addEventListener('keydown', (e) => {testTerminalChange(e)});
+let doCustomFilter = false;
+import {Color} from './../node_modules/color/index.js'
+let colorify;
+if (doCustomFilter) {
+    colorify = (base, target) => {
+        //let newColor = color(base);
+        //target = color(target);
+        let newColor = new Color(base);
 
-// Click detection to enable selection
-let startX;
-let startY;
-const delta = 6;
+        //for (let i = 0; i < window.theme.terminal.colorFilter.length; i++) {
+        //    if (window.theme.terminal.colorFilter[i].func === "mix") {
+        //        newColor = newColor[window.theme.terminal.colorFilter[i].func](target, ...window.theme.terminal.colorFilter[i].arg);
+        //    } else {
+        //        newColor = newColor[window.theme.terminal.colorFilter[i].func](...window.theme.terminal.colorFilter[i].arg);
+        //    }
+        //}
+        newColor = newColor["greyscale"](...window.theme.terminal.colorFilter[i].arg);
+        return newColor.hex();
+    };
+} else {
+    colorify = (base, target) => {
+        return Color(base).grayscale().mix(Color(target), 0.3).hex();
+    };
+}
 
-document.getElementById("terminal-view").addEventListener('mousedown', (e) => {
-    startX = e.pageX;
-    startY = e.pageY;
-});
+var fitAddon;
+var ligaturesAddon;
+var term;
 
-document.getElementById("terminal-view").addEventListener('mouseup', (e) => {
-    const diffX = Math.abs(e.pageX - startX);
-    const diffY = Math.abs(e.pageY - startY);
+function terminalInit() {
+    var termCol = "#9caca1";
+    var term = new Terminal({
+        cols: 80,
+        rows: 24,
+        cursorBlink: true,
+        cursorStyle: "block",
+        allowTransparency: false,
+        fontFamily: "Fira-Code",
+        fontSize: 15,
+        fontWeight: "normal",
+        fontWeightBold: "bold",
+        letterSpacing: 0,
+        scrollback: 1500,
+        allowProposedApi: true,
+        theme: {
+            foreground: colorify("#d3d7cf", termCol),
+            background: "#020303",
+            cursor: colorify("#d3d7cf", termCol),
+            cursorAccent: colorify("#d3d7cf", termCol),
+            selection: colorify("#d3d7cf", termCol),
+            black: colorify("#2e3436", termCol),
+            red: colorify("#cc0000", termCol),
+            green: colorify("#4e9a06", termCol),
+            yellow: colorify("#c4a000", termCol),
+            blue: colorify("#3465a4", termCol),
+            magenta: colorify("#75507b", termCol),
+            cyan: colorify("#06989a", termCol),
+            white: colorify("#d3d7cf", termCol),
+            brightBlack: colorify("#555753", termCol),
+            brightRed: colorify("#ef2929", termCol),
+            brightGreen: colorify("#8ae234", termCol),
+            brightYellow: colorify("#fce94f", termCol),
+            brightBlue: colorify("#729fcf", termCol),
+            brightMagenta: colorify("#ad7fa8", termCol),
+            brightCyan: colorify("#34e2e2", termCol),
+            brightWhite: colorify("#eeeeec", termCol)
+        }
+    });
 
-    if (diffX < delta && diffY < delta) {
-        // Click!
-        document.getElementById("terminal-textarea").focus();
-        document.getElementById("terminal-textarea").classList.add("active");
-        terminalActive = true;
-        let carpos = getCaretPosition(document.getElementById("terminal-textarea"));
-        let textlen = document.getElementById("terminal-textarea").innerHTML.length;
-        console.log(carpos);
-        console.log(textlen);
-        console.log(textlen - carpos);
-        document.getElementById("terminal-textarea").style.setProperty("--caret-pos", textlen - carpos);
-    }
+    fitAddon = new FitAddon.FitAddon();
+    ligaturesAddon = new LigaturesAddon.LigaturesAddon();
+    term.loadAddon(fitAddon);
+    term.loadAddon(new WebglAddon.WebglAddon());
     
+    term.open(document.getElementById('terminal-text'));
+
+    term.loadAddon(ligaturesAddon);
+    return term;
+}
+
+function termFit(term) {
+        let { cols, rows } = fitAddon.proposeDimensions();
+
+        // Apply custom fixes based on screen ratio, see #302
+        let w = screen.width;
+        let h = screen.height;
+        let x = 1;
+        let y = 0;
+
+        function gcd(a, b) {
+            return (b == 0) ? a : gcd(b, a % b);
+        }
+        let d = gcd(w, h);
+
+        if (d === 100) { y = 1; x = 3; }
+        // if (d === 120) y = 1;
+        if (d === 256) x = 2;
+
+        if (termFontSize < 15) y = y - 1;
+
+        cols = cols + x;
+        rows = rows + y;
+
+        if (term.cols !== cols || term.rows !== rows) {
+            term.resize(cols, rows);
+        }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    term = terminalInit();
+
+    termFit(term);
+    window.addEventListener('resize', function () {
+        termFit(term);
+    });
 });
 
-document.getElementById("terminal-textarea").addEventListener('focusout', (e) => {
-    document.getElementById("terminal-textarea").classList.remove("active");
-    terminalActive = false;
-})
-
-export {consoleLog, terminalAppend, testTerminalChange}
+export {consoleLog, terminalAppend, testTerminalChange, term}
