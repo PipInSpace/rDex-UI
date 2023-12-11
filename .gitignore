@@ -7,7 +7,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+# Node modules are made compatible with vanilla javascript and used in the browser
+# Don't judge me
+/src/node_modules/*
+!/src/node_modules/color*
+!/src/node_modules/simple-swizzle
+!/src/node_modules/is-arrayish
+/src/node_modules/*/*
+!/src/node_modules/*/*.js
+
 dist
 dist-ssr
 *.local
