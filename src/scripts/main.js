@@ -170,7 +170,7 @@ function init() {
         logo.style.setProperty("display", "none")
     }, 2450);
     setTimeout(() => {
-        window.__TAURI__.invoke('send_terminal', { input: "dir" })
+        window.__TAURI__.invoke('send_terminal', { input: "dir\n" })
     }, 6500);
 
 }

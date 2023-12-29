@@ -27,8 +27,9 @@ pub fn term(rx: Receiver<String>, window: tauri::Window) {
             if let Ok(input) = rx.recv() {
                 // Send input to the shell process
                 // Needs newline char for execution
+                println!("in: {:?}", (input).as_bytes());
                 stdin
-                    .write_all((input + "\n").as_bytes())
+                    .write_all((input).as_bytes())
                     .expect("Failed to write to shell process");
             }
         }
@@ -36,63 +37,29 @@ pub fn term(rx: Receiver<String>, window: tauri::Window) {
 
     // Output loop
     let mut line: Vec<u8> = vec![];
-    let mut lines: Vec<Vec<u8>> = vec![];
-    let mut replace_line = false;
+    let mut last_send = std::time::Instant::now();
 
     loop {
         // Read and print output from the shell process
 
-        let mut byte: [u8; 1] = [0]; 
-        stdout.read(&mut byte).unwrap();
-        let ch = byte[0] as char;
+        let mut byte_buffer: [u8; 1024] = [0; 1024]; 
 
-        if byte[0] != 0 {
-            match ch {
-                '\n' => {
-                    // New line. Send current line and exit replace mode
-                    if let Ok(li) = std::str::from_utf8(&line) {
-                        println!("{}\\n", li);
-                    }
-
-                    lines.push(line.clone());
-                    if !(line.len() == 0 && replace_line) {send(&line, replace_line, &window);}
-                    replace_line = false;
-
-                    line = vec![];
-                }
-                '\r' => {
-                    // Carret return. Send current line and enter replace mode
-                    if let Ok(li) = std::str::from_utf8(&line) {
-                        print!("{}\\r", li);
-                    }
-
-                    lines.push(line.clone());
-                    send(&line, replace_line, &window);
-                    replace_line = true;
-
-                    line = vec![];
-                }
-                '\x1b' => {
-                    // Escape char
-                    print!("ESC ")
-                }
-                _ => {
-                    print!("{} ", ch as u8);
-                    line.push(ch as u8);
-                }
+        if let Ok(buffer_len) = stdout.read(&mut byte_buffer) {
+            //println!("Send {}", ch);
+            for b in 0..buffer_len {
+                line.push(byte_buffer[b]);
             }
         }
-    }
-}
-
-fn send(line: &[u8], replace: bool, window: &tauri::Window) {
-    
-    if let Ok(li) = std::str::from_utf8(line) {
-
-        if replace {
-            window.emit("terminal_out_replace", li).unwrap();
-        } else {
-            window.emit("terminal_out", li).unwrap();
+        if last_send.elapsed().as_micros() > 100 && line.len() > 0 {
+            if let Ok(li) = std::str::from_utf8(&line) {
+                println!("out: {:?}", line);
+                window.emit("terminal_out", li).unwrap();
+                line.clear();
+                last_send = std::time::Instant::now();
+            } else {
+                println!("Failed to build string")
+            }
         }
+        thread::sleep(std::time::Duration::from_micros(10));
     }
 }

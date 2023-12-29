@@ -31,7 +31,7 @@
     },
     "windows": [
       {
-        "fullscreen": false,
+        "fullscreen": true,
         "resizable": true,
         "title": "rdex-ui",
         "width": 1600,

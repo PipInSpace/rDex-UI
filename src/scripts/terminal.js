@@ -1,7 +1,7 @@
 var termFontSize = 15;
 
 function terminalAppend(string) {
-    term.write(string + "\n\r")
+    term.write(string)
 }
 
 function terminalReplace(string) {
@@ -167,8 +167,42 @@ function termFit(term) {
         }
 }
 
+
+
 document.addEventListener('DOMContentLoaded', function () {
     term = terminalInit();
+    term.onData(
+        function (e) {
+            if (e == "\r") {
+                console.log("Enter")
+                term.write("\r");
+                window.__TAURI__.invoke('send_terminal', { input: "\r\n" });
+            }
+            console.log("Data" + e.data);
+            term.write(e);
+            window.__TAURI__.invoke('send_terminal', { input: e });
+        }
+    )
+
+    //term.prompt = () => {
+    //    term.write('\r\n$ ');
+    //};
+//
+    //term.onKey((e) => {
+    //    const ev = e.domEvent;
+    //    const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey;
+//
+    //    if (ev.keyCode === 13) {
+    //        term.prompt();
+    //    } else if (ev.keyCode === 8) {
+    //        // Do not delete the prompt
+    //        if (term._core.buffer.x > 2) {
+    //            term.write('\b \b');
+    //        }
+    //    } else if (printable) {
+    //        term.write(e.key);
+    //    }
+    //});
 
     termFit(term);
     window.addEventListener('resize', function () {
